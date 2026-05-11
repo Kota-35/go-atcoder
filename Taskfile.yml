@@ -1,0 +1,44 @@
+version: "3"
+
+tasks:
+  test:
+    desc: "Run Go unit tests"
+    cmds:
+      - go test ./...
+
+  oj-test:
+    desc: "Test with oj sample cases (run from problem dir, or task oj-test DIR=2026/04/20/abc454/a)"
+    dir: "{{.DIR | default .USER_WORKING_DIR}}"
+    cmds:
+      - go build -o a.out .
+      - oj test -c ./a.out -d tests
+      - rm -f a.out
+
+  submit:
+    desc: "Submit solution (run from problem dir, or task submit DIR=2026/05/11/abc325/a)"
+    dir: "{{.DIR | default .USER_WORKING_DIR}}"
+    cmds:
+      - acc submit main.go -- --language 6051
+
+  login:
+    desc: "Login to AtCoder via oj (task login USERNAME=xxx PASSWORD=xxx)"
+    cmds:
+      - oj login --use-browser never -u {{.USERNAME}} -p {{.PASSWORD}} https://atcoder.jp
+    requires:
+      vars: [USERNAME, PASSWORD]
+
+  new:
+    desc: "Create contest directory with acc (task new CONTEST=abc380)"
+    dir: "{{.USER_WORKING_DIR}}"
+    cmds:
+      - acc new {{.CONTEST}}
+    requires:
+      vars: [CONTEST]
+
+  setup:
+    desc: "Copy Go template to acc config directory"
+    cmds:
+      - mkdir -p ~/.config/atcoder-cli-nodejs/go
+      - cp template/main.go ~/.config/atcoder-cli-nodejs/go/main.go
+      - cp template/main_test.go ~/.config/atcoder-cli-nodejs/go/main_test.go
+      - echo "Done. Run 'task login' to authenticate with AtCoder."
