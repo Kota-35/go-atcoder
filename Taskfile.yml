@@ -12,7 +12,7 @@ tasks:
   new:
     desc: "Create problem directory and fetch tests (task new CONTEST=abc380 [PROBLEM=a])"
     vars:
-      PROBLEMS: '{{if .PROBLEM}}{{.PROBLEM}}{{else}}a b c d{{end}}'
+      PROBLEMS: "{{if .PROBLEM}}{{.PROBLEM}}{{else}}a b c d{{end}}"
     cmds:
       - for: { var: PROBLEMS, split: " " }
         task: _new-single
