@@ -26,7 +26,6 @@ tasks:
     cmds:
       - mkdir -p "{{.PROBLEM_DIR}}"
       - sed -e 's/CONTEST_ID/{{.CONTEST}}/g' -e 's/TASK_ID/{{.TASK_ID}}/g' "{{.TASKFILE_DIR}}/template/main.go" > "{{.PROBLEM_DIR}}/main.go"
-      - cp "{{.TASKFILE_DIR}}/template/main_test.go" "{{.PROBLEM_DIR}}/main_test.go"
       - oj download -d "{{.PROBLEM_DIR}}/tests" "{{.URL}}"
     requires:
       vars: [CONTEST, PROBLEM]
