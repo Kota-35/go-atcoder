@@ -1,9 +1,5 @@
 a.out
-*.out
 node_modules/
 .task/
 
 .direnv
-
-**/tests/
-**/contest.acc.json
