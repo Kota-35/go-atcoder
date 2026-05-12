@@ -43,21 +43,11 @@
             pkgs.go_1_25
             pkgs.gopls
             pkgs.go-task
-            pkgs.nodejs
             (patchedPython.withPackages (ps: [
               ps.online-judge-tools
             ]))
           ];
 
-          shellHook = ''
-            export NPM_CONFIG_PREFIX="$HOME/.npm-global"
-            export PATH="$HOME/.npm-global/bin:$PATH"
-            if ! command -v acc &>/dev/null; then
-              echo "Installing atcoder-cli..."
-              npm install -g atcoder-cli
-            fi
-            acc config oj-path "$(which oj)"
-          '';
         };
       });
     };
