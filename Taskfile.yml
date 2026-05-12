@@ -10,15 +10,33 @@ tasks:
       - rm -f a.out
 
   new:
-    desc: "Create problem directory and fetch tests (task new CONTEST=abc380 PROBLEM=a)"
+    desc: "Create problem directory and fetch tests (task new CONTEST=abc380 [PROBLEM=a])"
+    vars:
+      PROBLEMS: '{{if .PROBLEM}}{{.PROBLEM}}{{else}}a b c d{{end}}'
+    cmds:
+      - for: { var: PROBLEMS, split: " " }
+        task: _new-single
+        vars:
+          CONTEST: "{{.CONTEST}}"
+          PROBLEM: "{{.ITEM}}"
+    requires:
+      vars: [CONTEST]
+
+  _new-single:
+    internal: true
     vars:
       PROBLEM_DIR: "{{.USER_WORKING_DIR}}/{{.CONTEST}}/{{.PROBLEM}}"
       TASK_ID: "{{.CONTEST}}_{{.PROBLEM}}"
       URL: "https://atcoder.jp/contests/{{.CONTEST}}/tasks/{{.CONTEST}}_{{.PROBLEM}}"
     cmds:
-      - mkdir -p "{{.PROBLEM_DIR}}"
-      - sed -e 's/CONTEST_ID/{{.CONTEST}}/g' -e 's/TASK_ID/{{.TASK_ID}}/g' "{{.TASKFILE_DIR}}/template/main.go" > "{{.PROBLEM_DIR}}/main.go"
-      - oj download -d "{{.PROBLEM_DIR}}/tests" "{{.URL}}"
+      - |
+        if [ -d "{{.PROBLEM_DIR}}" ]; then
+          echo "skip: {{.CONTEST}}/{{.PROBLEM}} already exists"
+          exit 0
+        fi
+        mkdir -p "{{.PROBLEM_DIR}}"
+        sed -e 's/CONTEST_ID/{{.CONTEST}}/g' -e 's/TASK_ID/{{.TASK_ID}}/g' "{{.TASKFILE_DIR}}/template/main.go" > "{{.PROBLEM_DIR}}/main.go"
+        oj download -d "{{.PROBLEM_DIR}}/tests" "{{.URL}}"
     requires:
       vars: [CONTEST, PROBLEM]
 
