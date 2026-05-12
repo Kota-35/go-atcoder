@@ -9,14 +9,6 @@ tasks:
       - oj test -c ./a.out -d tests
       - rm -f a.out
 
-  fetch:
-    desc: "Fetch sample tests with oj (task fetch URL=https://atcoder.jp/contests/abc380/tasks/abc380_a)"
-    dir: "{{.DIR | default .USER_WORKING_DIR}}"
-    cmds:
-      - oj download -d tests {{.URL}}
-    requires:
-      vars: [URL]
-
   new:
     desc: "Create problem directory and fetch tests (task new CONTEST=abc380 PROBLEM=a)"
     vars:
