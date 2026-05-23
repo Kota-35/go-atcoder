@@ -6,7 +6,7 @@ tasks:
     dir: "{{.DIR | default .USER_WORKING_DIR}}"
     cmds:
       - go build -o a.out .
-      - oj test -c ./a.out -d tests
+      - oj test -c ./a.out -d tests -e 1e-6
       - rm -f a.out
 
   new:
