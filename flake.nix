@@ -43,6 +43,7 @@
             pkgs.go_1_25
             pkgs.gopls
             pkgs.go-task
+            (pkgs.writeShellScriptBin "gtime" ''exec ${pkgs.time}/bin/time "$@"'')
             (patchedPython.withPackages (ps: [
               ps.online-judge-tools
             ]))
